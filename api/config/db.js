@@ -1,11 +1,11 @@
 const Sequelize = require("sequelize");
 
-function init_connection() {
-  const sequelize = new Sequelize("database", "username", "password", {
-    host: "localhost",
-    dialect: "mysql",
-  });
+const sequelize = new Sequelize("h4c_db", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
+});
 
+async function validate() {
   try {
     await sequelize.authenticate();
     console.info("Database connection was established successfully");
@@ -14,4 +14,4 @@ function init_connection() {
   }
 }
 
-module.exports = [init_connection];
+module.exports = { sequelize, validate };
