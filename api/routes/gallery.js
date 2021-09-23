@@ -1,6 +1,6 @@
 const express = require("express");
 const GalleryImageController = require("../controllers/gallery");
-const cloudinary = require("cloudinary").v2;
+const { cloudinary, upload } = require("../config/bucket");
 
 const router = express.Router();
 
@@ -26,14 +26,12 @@ router.get("/get/image/:page_number", (req, res) => {
   }
 });
 
-router.post("/upload/image", (req, res) => {
-  upload_image = req.files.image;
+router.post("/upload/image", upload.single(image), (req, res) => {
+  upload_image = req.file;
 
-  cloudinary.uploader.upload(upload_image, {}, (response) => {
-    controller_responser = GalleryImageController.saveImage(response);
+  controller_responser = GalleryImageController.saveImage(response);
 
-    if ((controller_response.status = "success")) {
-      res.status(200).json(controller_response.data);
-    }
-  });
+  if ((controller_response.status = "success")) {
+    res.status(200).json(controller_response.data);
+  }
 });
