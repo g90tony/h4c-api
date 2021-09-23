@@ -28,6 +28,10 @@ const Blog = sequelize.define("Blog_Post", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   tags: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -42,7 +46,7 @@ const Blog = sequelize.define("Blog_Post", {
 async function syncBlogTable() {
   try {
     await Blog.sync({ force: false, alter: true });
-    console.info("All tables were created successfully");
+    console.info("Blog table was created successfully");
   } catch (error) {
     console.error("There was a problem creating tables", error);
   }
