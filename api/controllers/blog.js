@@ -21,9 +21,10 @@ async function create_post(payload) {
 }
 
 async function fetchPosts(current_page = 1) {
-  const offset = 20 * current_page;
+  const limit = 20;
+  const offset = (current_page - 1) * 20;
   try {
-    all_posts = await Blog.findAll({ limit: offset });
+    all_posts = await Blog.findAll({ limit, offset });
 
     return { status: "success", data: all_posts };
   } catch (error) {
@@ -34,11 +35,13 @@ async function fetchPosts(current_page = 1) {
 }
 
 async function fetchPublishedPosts(current_page = 1) {
-  const offset = 20 * current_page;
+  const limit = 20;
+  const offset = (current_page - 1) * 20;
   try {
     all_posts = await Blog.findAll({
       where: { status: "Published" },
-      limit: offset,
+      limit,
+      offset,
     });
 
     return { status: "success", data: all_posts };
@@ -50,11 +53,13 @@ async function fetchPublishedPosts(current_page = 1) {
 }
 
 async function fetchDraftPosts(current_page = 1) {
-  const offset = 20 * current_page;
+  const limit = 20;
+  const offset = (current_page - 1) * 20;
   try {
     all_posts = await Blog.findAll({
       where: { status: "Published" },
-      limit: offset,
+      limit,
+      offset,
     });
 
     return { status: "success", data: all_posts };
