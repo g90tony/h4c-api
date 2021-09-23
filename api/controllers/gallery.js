@@ -35,8 +35,10 @@ async function fetchSingleImage(image_id) {
 }
 
 async function fetchImages(current_page = 1) {
+  const limit = 1 - current_page;
+  const offset = limit * 20;
   try {
-    fetched_images = await GalleryImage.findAll();
+    fetched_images = await GalleryImage.findAll({ limit, offset });
 
     return { status: "success", data: fetched_images };
   } catch (error) {
