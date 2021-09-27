@@ -83,3 +83,5 @@ router.delete("delete/post/:id", (req, res) => {
     res.status(500).json(blog_controller_response.data);
   }
 });
+
+module.exports = router;
