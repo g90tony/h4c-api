@@ -1,42 +1,45 @@
-const { Blog } = require("./api/models/blog");
+const { Blog } = require("../models/blog-post");
 
-async function create_post(payload) {
-  try {
-    new_post = await Blog.create({
-      title: payload.title,
-      image: payload.image,
-      views: payload.views,
-      publishedOn: payload.publishedOn,
-      author: payload.author,
-      content: payload.content,
-      category: payload.category,
-      tags: payload.tags,
-      status: payload.status,
+async function create_post(req, res) {
+  Blog.create({
+    title: req.body.title,
+    image: req.file.path,
+    author: req.body.author,
+    content: req.body.content,
+    category: req.body.category,
+    tags: req.body.tags,
+    status: req.body.status,
+  })
+    .then((created_post) => {
+      res.status(200).json({ status: "success", data: created_post });
+    })
+    .catch((error) => {
+      res.status(200).json({ status: "failed", data: error });
     });
-
-    return { status: "success", data: new_post };
-  } catch (error) {
-    return { status: "failed", data: error };
-  }
 }
 
-async function fetchPosts(current_page = 1) {
+async function fetchPosts(req, res) {
+  const current_page = req.params.page_number;
+
   const limit = 20;
   const offset = (current_page - 1) * 20;
   try {
     all_posts = await Blog.findAll({ limit, offset });
 
-    return { status: "success", data: all_posts };
+    res.status(200).json({ status: "success", data: all_posts });
   } catch (error) {
     console.error("There was a problem fetching all the posts");
 
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function fetchPublishedPosts(current_page = 1) {
+async function fetchPublishedPosts(req, res) {
+  const current_page = req.params.page_number;
+
   const limit = 20;
   const offset = (current_page - 1) * 20;
+
   try {
     all_posts = await Blog.findAll({
       where: { status: "Published" },
@@ -44,33 +47,37 @@ async function fetchPublishedPosts(current_page = 1) {
       offset,
     });
 
-    return { status: "success", data: all_posts };
+    res.status(200).json({ status: "success", data: all_posts });
   } catch (error) {
     console.error("There was a problem fetching all the posts");
 
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function fetchDraftPosts(current_page = 1) {
+async function fetchDraftPosts(req, res) {
+  const current_page = req.params.page_number;
+
   const limit = 20;
   const offset = (current_page - 1) * 20;
   try {
     all_posts = await Blog.findAll({
-      where: { status: "Published" },
+      where: { status: "Draft" },
       limit,
       offset,
     });
 
-    return { status: "success", data: all_posts };
+    res.status(200).json({ status: "success", data: all_posts });
   } catch (error) {
     console.error("There was a problem fetching all the posts");
 
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function fetchSinglePost(post_id) {
+async function fetchSinglePost(req, res) {
+  const post_id = req.params.id;
+
   try {
     blog_post = await Blog.findAll({
       where: {
@@ -78,33 +85,38 @@ async function fetchSinglePost(post_id) {
       },
     });
 
-    return { status: "success", data: blog_post };
+    res.status(200).json({ status: "success", data: blog_post });
   } catch (error) {
     console.error("There was a problem fetching the blog post");
 
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function publishPost(post_id) {
+async function publishPost(req, res) {
+  const post_id = req.params.id;
+
   try {
     fetched_post = await Blog.findByPk(post_id);
 
     fetched_post.status = "published";
+    fetched_post.publishedOn = Date.now();
 
     isSaved = await fetched_post.save();
 
     if (isSaved) {
-      return { status: "success" };
+      res.status(200).json({ status: "success", data: isSaved });
     } else {
-      return { status: "failed", data: "none" };
+      res.status(400).json({ status: "failed", data: "none" });
     }
   } catch (error) {
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function addView(post_id) {
+async function addView(req, res) {
+  const post_id = req.params.id;
+
   try {
     fetched_post = await Blog.findByPk(post_id);
 
@@ -113,22 +125,26 @@ async function addView(post_id) {
     isSaved = await fetched_post.save();
 
     if (isSaved) {
-      return { status: "success" };
+      res.status(200).json({ status: "success", data: isSaved });
     } else {
-      return { status: "failed", data: "none" };
+      res.status(400).json({ status: "failed", data: "none" });
     }
   } catch (error) {
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
-async function deletePost(post_id) {
+async function deletePost(req, res) {
+  const post_id = req.params.id;
+
   try {
     fetched_post = await Blog.findByPk(post_id);
 
     isDeleted = await fetched_post.destroy();
+
+    res.status(200).json({ status: "success", data: isDeleted });
   } catch (error) {
-    return { status: "failed", data: error };
+    res.status(500).json({ status: "failed", data: error });
   }
 }
 
