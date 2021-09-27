@@ -32,7 +32,7 @@ const GalleryImage = sequelize.define("Gallery_Image", {
   },
 });
 
-async function syncGalleryImage() {
+async function syncGalleryImageTable() {
   try {
     await GalleryImage.sync();
 
@@ -47,5 +47,5 @@ async function syncGalleryImage() {
 
 module.exports = {
   GalleryImage,
-  syncGalleryImage,
+  syncGalleryImageTable,
 };
