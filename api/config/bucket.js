@@ -11,14 +11,14 @@ cloudinary.config({
 const gallery_storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "gallery_bucket",
+    folder: process.env.galleryImageBucket,
   },
 });
 
 const blog_storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "blog_thumbnail_bucket",
+    folder: process.env.blogThumbnailBucket,
   },
 });
 
