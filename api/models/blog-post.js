@@ -41,6 +41,11 @@ const Blog = sequelize.define("Blog_Post", {
     allowNull: true,
     defaultValue: "Draft",
   },
+  views: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
 });
 
 async function syncBlogTable() {
