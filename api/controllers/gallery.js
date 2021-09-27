@@ -24,6 +24,34 @@ async function saveImage(payload) {
   }
 }
 
+async function saveImages(payload) {
+  try {
+    payload.map((image) => {
+      new_images = await GalleryImage.create({
+        public_id: payload.public_id,
+        version: payload.version,
+        signature: payload.signature,
+        format: payload.format,
+        resource_type: payload.resource_type,
+        url: payload.url,
+        secure_url: payload.secure_url,
+      });
+
+      return new_image;
+    });
+
+    return {
+      status: "success",
+      data: new_images,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      data: error,
+    };
+  }
+}
+
 async function fetchSingleImage(image_id) {
   try {
     fetched_image = await GalleryImage.findByPk(image_id);
@@ -49,5 +77,6 @@ async function fetchImages(current_page = 1) {
 module.exports = {
   fetchSingleImage,
   fetchImages,
+  saveImages,
   saveImage,
 };
