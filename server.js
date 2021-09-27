@@ -1,11 +1,13 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const { sequelize, validate } = require("./api/config/db");
 const { syncBlogTable } = require("./api/models/blog-post");
 const { syncGalleryImageTable } = require("./api/models/gallery-image");
-const { APIBlogRoutes } = require("./api/routes/blog");
-const { APIGalleryRoutes } = require("./api/routes/gallery");
 
 const app = express();
+
+// Initialize dotenv
+dotenv.config();
 
 /* =================================================================================
 DATABASE CONFIGURATIONS
@@ -20,6 +22,7 @@ The sync table functions create or update tables
 from the defined schemas. This is the equivalent
 of a database migrations.
 =================================================================================*/
+sequelize;
 //  DATABASE CONNECTION VALIDATION
 validate();
 // MIGRATED BLOG MODEL
@@ -35,9 +38,9 @@ syncGalleryImageTable();
 */
 
 // CLIENT BLOG ENDPOINTS
-app.use("/api/blog", APIBlogRoutes);
+app.use("/api/blog", require("./api/routes/blog"));
 // CLIENT GALLERY IMAGES ENDPOINTS
-app.use("/api/gallery", APIGalleryRoutes);
+app.use("/api/gallery", require("./api/routes/gallery"));
 
 /*================================================================================
 SERVER LISTENER CONFIGURATION
