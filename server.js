@@ -2,6 +2,8 @@ const express = require("express");
 const { sequelize, validate } = require("./api/config/db");
 const { syncBlogTable } = require("./api/models/blog-post");
 const { syncGalleryImageTable } = require("./api/models/gallery-image");
+const { APIBlogRoutes } = require("./api/routes/blog");
+const { APIGalleryRoutes } = require("./api/routes/gallery");
 
 const app = express();
 
@@ -24,6 +26,18 @@ validate();
 syncBlogTable();
 // MIGRATE GALLERY IMAGE MODEL
 syncGalleryImageTable();
+
+/* API ROUTE INITIALIZATION
+  /api/blog: handles all the client blog requests
+
+  /api/gallery/images: handles all the  clients 
+      gallery images requests
+*/
+
+// CLIENT BLOG ENDPOINTS
+app.use("/api/blog", APIBlogRoutes);
+// CLIENT GALLERY IMAGES ENDPOINTS
+app.use("/api/gallery", APIGalleryRoutes);
 
 /*================================================================================
 SERVER LISTENER CONFIGURATION
