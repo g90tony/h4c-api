@@ -104,6 +104,24 @@ async function publishPost(post_id) {
   }
 }
 
+async function addView(post_id) {
+  try {
+    fetched_post = await Blog.findByPk(post_id);
+
+    fetched_post.views++;
+
+    isSaved = await fetched_post.save();
+
+    if (isSaved) {
+      return { status: "success" };
+    } else {
+      return { status: "failed", data: "none" };
+    }
+  } catch (error) {
+    return { status: "failed", data: error };
+  }
+}
+
 async function deletePost(post_id) {
   try {
     fetched_post = await Blog.findByPk(post_id);
@@ -121,5 +139,6 @@ module.exports = {
   fetchPublishedPosts,
   fetchDraftPosts,
   publishPost,
+  addView,
   deletePost,
 };
