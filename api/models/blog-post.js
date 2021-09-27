@@ -18,7 +18,6 @@ const Blog = sequelize.define("Blog_Post", {
   publishedOn: {
     type: DataTypes.DATE,
     allowNull: true,
-    defaultValue: Sequelize.NOW,
   },
   author: {
     type: DataTypes.STRING,
@@ -40,11 +39,6 @@ const Blog = sequelize.define("Blog_Post", {
     type: DataTypes.STRING,
     allowNull: true,
     defaultValue: "Draft",
-  },
-  views: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
   },
 });
 
